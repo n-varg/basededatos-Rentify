@@ -3,6 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const productosRoutes = require("./routes/productos");
+const pedidosRoutes = require("./routes/pedidos");
+
 const { router: authRoutes } = require("./routes/auth");
 
 
@@ -31,6 +33,9 @@ mongoose
 app.use("/productos", productosRoutes);
 // Usar las rutas de autenticación
 app.use("/auth", authRoutes);
+// Usar las rutas de autenticación
+app.use("/pedidos", pedidosRoutes);
+
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

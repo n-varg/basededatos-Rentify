@@ -89,11 +89,7 @@ router.patch("/:idUsuario", async (req, res) => {
 });
 
 // Eliminar un usuario por idUsuario en el cuerpo de la solicitud
-router.delete(
-  "/:idUsuario",
-  authMiddleware,
-  authorize("admin"),
-  async (req, res) => {
+router.delete("/:idUsuario",authMiddleware,authorize("admin"),async (req, res) => {
     try {
       const usuarioEliminado = await Usuario.findOneAndDelete({
         idUsuario: req.params.idUsuario,
