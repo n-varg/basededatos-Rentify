@@ -1,9 +1,9 @@
-// routes/productos.js
+// routes/usuarios.js
 const express = require("express");
 const Producto = require("../models/Producto");
 const router = express.Router();
 
-// Crear un nuevo producto
+// Crear un nuevo usuario
 router.post("/", async (req, res) => {
   const nuevoProducto = new Producto(req.body);
   try {
@@ -14,53 +14,53 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Obtener todos los productos
+// Obtener todos los usuarios
 router.get("/", async (req, res) => {
   try {
-    const productos = await Producto.find();
-    res.status(200).send(productos);
+    const usuarios = await Producto.find();
+    res.status(200).send(usuarios);
   } catch (error) {
     res.status(500).send(error);
   }
 });
 
-// Obtener un producto por ID
+// Obtener un usuario por ID
 router.get("/:id", async (req, res) => {
   try {
-    const producto = await Producto.findById(req.params.id);
-    if (!producto) {
+    const usuario = await Producto.findById(req.params.id);
+    if (!usuario) {
       return res.status(404).send();
     }
-    res.status(200).send(producto);
+    res.status(200).send(usuario);
   } catch (error) {
     res.status(500).send(error);
   }
 });
 
-// Actualizar un producto por ID
+// Actualizar un usuario por ID
 router.patch("/:id", async (req, res) => {
   try {
-    const productoActualizado = await Producto.findByIdAndUpdate(req.params.id, req.body, {
+    const usuarioActualizado = await Producto.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
-    if (!productoActualizado) {
+    if (!usuarioActualizado) {
       return res.status(404).send();
     }
-    res.status(200).send(productoActualizado);
+    res.status(200).send(usuarioActualizado);
   } catch (error) {
     res.status(400).send(error);
   }
 });
 
-// Eliminar un producto por ID
+// Eliminar un usuario por ID
 router.delete("/:id", async (req, res) => {
   try {
-    const productoEliminado = await Producto.findByIdAndDelete(req.params.id);
-    if (!productoEliminado) {
+    const usuarioEliminado = await Producto.findByIdAndDelete(req.params.id);
+    if (!usuarioEliminado) {
       return res.status(404).send();
     }
-    res.status(200).send(productoEliminado);
+    res.status(200).send(usuarioEliminado);
   } catch (error) {
     res.status(500).send(error);
   }

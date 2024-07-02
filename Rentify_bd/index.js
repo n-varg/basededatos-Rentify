@@ -3,7 +3,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const productosRoutes = require("./routes/productos");
-const propietariosRoutes = require("./routes/propietarios");
 const { router: authRoutes } = require("./routes/auth");
 
 
@@ -30,8 +29,6 @@ mongoose
 
 // Usar las rutas de productos
 app.use("/productos", productosRoutes);
-// Usar las rutas de propietarios
-app.use("/propietarios", propietariosRoutes);
 // Usar las rutas de autenticación
 app.use("/auth", authRoutes);
 
