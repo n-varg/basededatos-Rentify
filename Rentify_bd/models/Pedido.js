@@ -7,18 +7,24 @@ const pedidoSchema = new mongoose.Schema({
     index: true,
     unique: true,
   },
-  productos: [{
-    idProducto: {
-      type: String,
-      required: true,
+  productos: [
+    {
+      idProducto: {
+        type: String,
+        required: true,
+      },
+      cantidad: {
+        type: Number,
+        required: true,
+        min: 1,
+      },
     },
-    cantidad: {
-      type: Number,
-      required: true,
-      min: 1,
-    },
-  }],
-  usuario: {
+  ],
+  usuarioCliente: {
+    type: String,
+    required: true,
+  },
+  usuarioPropietario: {
     type: String,
     required: true,
   },
@@ -48,57 +54,67 @@ const pedidoSchema = new mongoose.Schema({
   direccionEntrega: {
     Provincia: {
       type: String,
-      required: true,
       trim: true,
-    },
-    Distrito: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    Corregimiento: {
-      type: String,
-      required: true,
-      trim: true,
+      enum: [
+        "Bocas del Toro",
+        "Coclé",
+        "Colón",
+        "Chiriquí",
+        "Darién",
+        "Herrera",
+        "Los Santos",
+        "Panamá",
+        "Veraguas",
+        "Comarca Guna Yala (anteriormente conocida como San Blas)",
+        "Comarca Emberá-Wounaan",
+        "Comarca Ngäbe-Buglé",
+      ],
     },
     Calle: {
       type: String,
-      required: true,
-      trim: true,
     },
     Destino: {
       type: String,
-      required: true,
     },
   },
   metodoPago: {
     type: String,
     required: true,
-    enum: ["Tarjeta de Crédito", "PayPal", "Transferencia Bancaria", "Efectivo", "Yappy"],
+    enum: [
+      "Tarjeta de Crédito",
+      "PayPal",
+      "Transferencia Bancaria",
+      "Efectivo",
+      "Yappy",
+    ],
   },
   notas: {
     type: String,
   },
+  aceptaPedido: {
+    type: Boolean,
+    default: false,
+  },
   updatedAt: {
     type: Date,
     default: Date.now,
-  }
+  },
 });
 
 // Middleware para actualizar updatedAt antes de guardar
-pedidoSchema.pre("save", function(next) {
+pedidoSchema.pre("save", function (next) {
   this.updatedAt = Date.now();
   next();
 });
 
 // Middleware para actualizar updatedAt antes de actualizar
-pedidoSchema.pre("findOneAndUpdate", function(next) {
+pedidoSchema.pre("findOneAndUpdate", function (next) {
   this._update.updatedAt = Date.now();
   next();
 });
 
 // Middleware para generar idPedido antes de guardar
-pedidoSchema.pre("save", function(next) {
+pedidoSchema.pre("save", function (next) {
   if (!this.idPedido) {
     this.idPedido = generarId();
   }

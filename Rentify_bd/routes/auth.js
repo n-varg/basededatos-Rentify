@@ -12,7 +12,7 @@ function generateToken(usuario) {
   return jwt.sign(
     { idUsuario: usuario.idUsuario, rol: usuario.rol },
     secretKey,
-    { expiresIn: "1h" }
+    { expiresIn: "3h" }
   );
 }
 
