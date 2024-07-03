@@ -1,3 +1,5 @@
+// routes/pedidos.js
+
 const express = require("express");
 const router = express.Router();
 const Pedido = require("../models/Pedido");
@@ -46,7 +48,7 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // Obtener todos los pedidos
-router.get("/", authMiddleware, authorize("admin"), async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
   try {
     const pedidos = await Pedido.find({});
     res.status(200).send(pedidos);

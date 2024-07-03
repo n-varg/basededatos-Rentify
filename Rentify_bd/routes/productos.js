@@ -39,7 +39,7 @@ router.post("/", authMiddleware, async (req, res) => {
       categoria,
       precioPorDia,
       disponibilidad,
-      propietario, // Aquí se asume que propietario es el idUsuario del usuario existente
+      propietario,
     });
 
     // Guardar el producto en la base de datos

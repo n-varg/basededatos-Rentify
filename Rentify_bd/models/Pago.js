@@ -1,25 +1,24 @@
+// models/Pago.js
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const pagoSchema = new mongoose.Schema({
+const pagoSchema = new Schema({
   idPago: {
     type: String,
-    required: true,
     unique: true,
+    index:true
   },
   idPedido: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true,
-    ref: "Pedido",
   },
   usuarioCliente: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true,
-    ref: "Usuario",
   },
   usuarioPropietario: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true,
-    ref: "Usuario",
   },
   fechaPago: {
     type: Date,
@@ -49,19 +48,21 @@ const pagoSchema = new mongoose.Schema({
   },
 });
 
-// Middleware para generar idPago antes de guardar
-pagoSchema.pre("save", function (next) {
-  if (!this.idPago) {
-    this.idPago = generarIdPago();
-  }
-  next();
-});
+  // Middleware para generar idPago antes de guardar
+  pagoSchema.pre("save", function (next) {
+    if (!this.idPago) {
+      this.idPago = generarId();
 
-// Función para generar un ID personalizado para pagos
-function generarIdPago() {
-  return "PAGO_" + Math.floor(Math.random() * 100000);
-}
+    }
+    next();
+  });
+
+  // Función para generar un ID personalizado
+function generarId() {
+    return "PAGO_" + Math.floor(Math.random() * 100000);
+  }
+
+  
 
 const Pago = mongoose.model("Pago", pagoSchema);
-
 module.exports = Pago;

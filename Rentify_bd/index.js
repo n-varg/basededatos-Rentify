@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const productosRoutes = require("./routes/productos");
 const pedidosRoutes = require("./routes/pedidos");
+const pagosRoutes = require("./routes/pagos");
 
 const { router: authRoutes } = require("./routes/auth");
 
@@ -35,6 +36,9 @@ app.use("/productos", productosRoutes);
 app.use("/auth", authRoutes);
 // Usar las rutas de autenticación
 app.use("/pedidos", pedidosRoutes);
+// Usar las rutas de autenticación
+app.use("/pagos", pagosRoutes);
+
 
 
 const PORT = process.env.PORT || 3001;
