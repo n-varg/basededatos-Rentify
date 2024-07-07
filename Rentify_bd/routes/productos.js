@@ -68,6 +68,77 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Obtener productos por nombre de categoría
+router.get("/categoria/:nombreCategoria", async (req, res) => {
+  try {
+    const productos = await Producto.find({ categoria: req.params.nombreCategoria });
+    
+    if (productos.length === 0) {
+      return res.status(404).send({ error: "No se encontraron productos para esta categoría" });
+    }
+
+    res.status(200).send(productos);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Obtener productos por nombre
+router.get("/buscar/:nombreProducto", async (req, res) => {
+  try {
+    const regex = new RegExp(req.params.nombreProducto, 'i'); 
+    const productos = await Producto.find({ nombre: { $regex: regex } });
+
+    if (productos.length === 0) {
+      return res.status(404).send({ error: "No se encontraron productos con ese nombre" });
+    }
+
+    res.status(200).send(productos);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Obtener productos por rango de precio
+router.get("/precio/:min/:max", async (req, res) => {
+  const { min, max } = req.params;
+
+  try {
+    const productos = await Producto.find({
+      precioPorDia: { $gte: min, $lte: max }
+    });
+
+    if (productos.length === 0) {
+      return res.status(404).send({ error: "No se encontraron productos en ese rango de precio" });
+    }
+
+    res.status(200).send(productos);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Obtener productos por rango de precio y nombre
+router.get("/precio/:min/:max/:nombreProducto", async (req, res) => {
+  const { min, max, nombreProducto } = req.params;
+
+  try {
+    const regex = new RegExp(nombreProducto, 'i');
+    const productos = await Producto.find({
+      precioPorDia: { $gte: min, $lte: max },
+      nombre: { $regex: regex }
+    });
+
+    if (productos.length === 0) {
+      return res.status(404).send({ error: "No se encontraron productos con esas características" });
+    }
+
+    res.status(200).send(productos);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // Obtener un producto por ID
 router.get("/:id", async (req, res) => {
   try {
@@ -83,6 +154,24 @@ router.get("/:id", async (req, res) => {
     res.status(500).send(error);
   }
 });
+
+// Obtener productos por propietario
+router.get("/propietario/:idPropietario", async (req, res) => {
+  const { idPropietario } = req.params;
+
+  try {
+    const productos = await Producto.find({ propietario: idPropietario });
+
+    if (productos.length === 0) {
+      return res.status(404).send({ error: "No se encontraron productos para este propietario" });
+    }
+
+    res.status(200).send(productos);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 
 // Actualizar un producto por ID
 router.patch("/:id", authMiddleware, async (req, res) => {
