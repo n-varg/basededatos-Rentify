@@ -11,9 +11,14 @@ const { router: authRoutes } = require("./routes/auth");
 
 const app = express();
 
+const corsOptions = {
+  origin: "http://localhost:5173", // URL de tu frontend
+  credentials: true, // Permitir el envío de credenciales
+};
+
 // Middleware para parsear JSON y permitir CORS
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Conexión a MongoDB
 mongoose

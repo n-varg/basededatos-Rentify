@@ -5,8 +5,12 @@ const { authMiddleware, authorize } = require("./auth");
 
 const router = express.Router();
 
+//Agregar al router pos authMiddleware,
+
 // Ruta para agregar un nuevo producto
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", async (req, res) => {
+  console.log('POST /productos called');
+  console.log('Request body:', req.body);
   try {
     const {
       nombre,
