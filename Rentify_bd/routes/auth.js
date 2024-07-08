@@ -19,11 +19,13 @@ function generateToken(usuario) {
 // Registro de usuario
 router.post("/", async (req, res) => {
   try {
+    console.log(req.body)
     const usuario = new Usuario(req.body);
     await usuario.save();
     const token = generateToken(usuario);
     res.status(201).send({ usuario, token });
   } catch (error) {
+    console.log(error)
     res.status(400).send(error);
   }
 });
@@ -38,8 +40,10 @@ router.post("/login", async (req, res) => {
       return res.status(400).send({ error: "Credenciales inválidas" });
     }
 
+    
     const token = generateToken(usuario);
     res.send({ usuario, token });
+    req.session.token = token; //se guarda el token en la sesion
   } catch (error) {
     res.status(500).send(error);
   }
