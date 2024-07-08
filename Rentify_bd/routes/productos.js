@@ -8,7 +8,7 @@ const router = express.Router();
 //Agregar al router pos authMiddleware,
 
 // Ruta para agregar un nuevo producto
-router.post("/", async (req, res) => {
+router.post("/",authMiddleware, async (req, res) => {
   console.log('POST /productos called');
   console.log('Request body:', req.body);
   try {
@@ -18,7 +18,9 @@ router.post("/", async (req, res) => {
       categoria,
       precioPorDia,
       disponibilidad,
+      provincia,
       propietario,
+      imagenes,
     } = req.body;
 
     // Verificar si el propietario (idUsuario) existe en la base de datos
@@ -43,7 +45,9 @@ router.post("/", async (req, res) => {
       categoria,
       precioPorDia,
       disponibilidad,
+      provincia,
       propietario,
+      imagenes
     });
 
     // Guardar el producto en la base de datos

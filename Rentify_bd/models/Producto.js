@@ -21,7 +21,16 @@ const productoSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    enum: ["Electrónica", "Muebles", "Vehículos", "Ropa", "Herramientas", "Juguetes", "Deportes", "Otros"],
+    enum: [
+      "Electrónica",
+      "Muebles",
+      "Vehículos",
+      "Ropa",
+      "Herramientas",
+      "Juguetes",
+      "Deportes",
+      "Otros",
+    ],
   },
   precioPorDia: {
     type: Number,
@@ -32,18 +41,34 @@ const productoSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  imagenes: [{
-    type: String,
-    validate: {
-      validator: function(v) {
-        return /^https?:\/\/.+\.(jpg|jpeg|png|gif|bmp)$/.test(v);
-      },
-      message: props => `${props.value} no es una URL válida para una imagen!`
-    }
-  }],
+  imagenes: [
+    {
+      type: String,
+    },
+  ],
   propietario: {
     type: String,
     required: true,
+  },
+  provincia: {
+    type: String,
+    required: true,
+    trim: true,
+    enum: [
+      "Bocas del Toro",
+      "Coclé",
+      "Colón",
+      "Chiriquí",
+      "Darién",
+      "Herrera",
+      "Los Santos",
+      "Panamá",
+      "Veraguas",
+      "Panamá Oeste",
+      "Emberá",
+      "Kuna Yala",
+      "Ngäbe-Buglé",
+    ],
   },
   createdAt: {
     type: Date,
@@ -59,26 +84,28 @@ const productoSchema = new mongoose.Schema({
     min: 0,
     max: 5,
   },
-  reseñas: [{
-    usuario: {
-      type: String,
-      required: true
+  reseñas: [
+    {
+      usuario: {
+        type: String,
+        required: true,
+      },
+      comentario: {
+        type: String,
+        trim: true,
+      },
+      calificacion: {
+        type: Number,
+        required: true,
+        min: 0,
+        max: 5,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
     },
-    comentario: {
-      type: String,
-      trim: true,
-    },
-    calificacion: {
-      type: Number,
-      required: true,
-      min: 0,
-      max: 5,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-  }],
+  ],
 });
 
 /*const jwt = require('jsonwebtoken');
@@ -100,13 +127,13 @@ const authMiddleware = (req, res, next) => {
 };*/
 
 // Middleware para actualizar updatedAt antes de guardar
-productoSchema.pre("save", function(next) {
+productoSchema.pre("save", function (next) {
   this.updatedAt = Date.now();
   next();
 });
 
 // Middleware para actualizar updatedAt antes de actualizar
-productoSchema.pre("findOneAndUpdate", function(next) {
+productoSchema.pre("findOneAndUpdate", function (next) {
   this._update.updatedAt = Date.now();
   next();
 });

@@ -19,7 +19,6 @@ function generateToken(usuario) {
 // Registro de usuario
 router.post("/", async (req, res) => {
   try {
-    console.log(req.body)
     const usuario = new Usuario(req.body);
     await usuario.save();
     const token = generateToken(usuario);
@@ -39,8 +38,6 @@ router.post("/login", async (req, res) => {
     if (!usuario || !(await bcrypt.compare(password, usuario.password))) {
       return res.status(400).send({ error: "Credenciales inválidas" });
     }
-
-    
     const token = generateToken(usuario);
     res.send({ usuario, token });
     req.session.token = token; //se guarda el token en la sesion
@@ -123,6 +120,30 @@ function authMiddleware(req, res, next) {
     req.user = decoded;
     next();
   } catch (error) {
+    res.status(401).send({ error: "Autenticación fallida." });
+  }
+}
+
+
+function authMiddleware(req, res, next) {
+  console.log("authMiddleware llamado"); // Añadir esto
+  const token = req.header("Authorization")?.replace("Bearer ", "");
+  console.log("Token recibido:", token); // Añadir esto
+
+  if (!token) {
+    console.log("Token no proporcionado"); // Añadir esto
+    return res
+      .status(401)
+      .send({ error: "Acceso denegado. Token no proporcionado." });
+  }
+
+  try {
+    const decoded = jwt.verify(token, secretKey);
+    req.user = decoded;
+    console.log("Token decodificado:", decoded); // Añadir esto
+    next();
+  } catch (error) {
+    console.log("Error de autenticación:", error); // Añadir esto
     res.status(401).send({ error: "Autenticación fallida." });
   }
 }
