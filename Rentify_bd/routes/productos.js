@@ -8,7 +8,7 @@ const router = express.Router();
 //Agregar al router pos authMiddleware,
 
 // Ruta para agregar un nuevo producto
-router.post("/",authMiddleware, async (req, res) => {
+router.post("/", async (req, res) => {
   console.log('POST /productos called');
   console.log('Request body:', req.body);
   try {
@@ -22,21 +22,6 @@ router.post("/",authMiddleware, async (req, res) => {
       propietario,
       imagenes,
     } = req.body;
-
-    // Verificar si el propietario (idUsuario) existe en la base de datos
-    const usuarioExistente = await Usuario.findOne({ idUsuario: propietario });
-    if (!usuarioExistente) {
-      return res
-        .status(404)
-        .json({ error: "El propietario especificado no existe" });
-    }
-
-    // Verificar que el propietario coincida con el usuario autenticado
-    if (propietario !== req.user.idUsuario) {
-      return res.status(403).json({
-        error: "No tienes permiso para agregar productos para otro propietario",
-      });
-    }
 
     // Crear el nuevo producto
     const producto = new Producto({
@@ -178,22 +163,21 @@ router.get("/propietario/:idPropietario", async (req, res) => {
 
 
 // Actualizar un producto por ID
-router.patch("/:id", authMiddleware, async (req, res) => {
+router.patch("/:idProducto", async (req, res) => {
   try {
-    const producto = await Producto.findById(req.params.id);
+    console.log('POST /productos/:id (editar producto) called');
+    console.log('Request body:', req.body);
+    const producto = await Producto.findOne({ idProducto: req.params.idProducto});
     if (!producto) {
       return res.status(404).send();
     }
-    if (producto.propietario.toString() !== req.user.idUsuario) {
-      return res
-        .status(403)
-        .send({ error: "No tienes permiso para actualizar este producto." });
-    }
+
     Object.keys(req.body).forEach((key) => (producto[key] = req.body[key]));
     await producto.save();
     res.status(200).send(producto);
   } catch (error) {
     res.status(400).send(error);
+    console.log(error)
   }
 });
 

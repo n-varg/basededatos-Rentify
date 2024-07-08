@@ -53,7 +53,6 @@ const productoSchema = new mongoose.Schema({
   },
   provincia: {
     type: String,
-    required: true,
     trim: true,
     enum: [
       "Bocas del Toro",
@@ -70,6 +69,7 @@ const productoSchema = new mongoose.Schema({
       "Kuna Yala",
       "Ngäbe-Buglé",
     ],
+    default:"Panamá"
   },
   createdAt: {
     type: Date,
