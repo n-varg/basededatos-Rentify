@@ -27,6 +27,7 @@ const productoSchema = new mongoose.Schema({
       "Vehículos",
       "Ropa",
       "Herramientas",
+      "Eventos",
       "Juguetes",
       "Deportes",
       "Otros",
