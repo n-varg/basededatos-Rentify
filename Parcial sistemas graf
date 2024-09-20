@@ -1,0 +1,203 @@
+#include <windows.h>
+#include <GL/glut.h>
+
+
+
+/*Para el Fondo de atardecer*/
+// Definir una variable para el color naranja
+GLfloat colorNaranja[3] = {1.0, 0.35, 0.0};
+// Definir una variable para el color amarillo
+GLfloat colorAmarillo[3] = {1.0, 0.99, 0.07};
+
+/*Para el cesped*/
+// Definir una variable para el color verde cesped
+GLfloat colorVerdeCesped[3] = {0.25, 0.51, 0};
+// Definir una variable para el color amarillo cesped
+GLfloat colorAmarilloCesped[3] = {0.87, 0.79, 0};
+
+/*Para la carretera*/
+// Definir una variable para el color gris de carretera
+GLfloat colorGris[3] = {0.76, 0.76, 0.78};
+// Definir una variable para el color amarillo de lineas
+GLfloat colorAmarilloLineas[3] = {0.99, 0.8, 0.01};
+
+
+/*Para las montañas*/
+// Definir una variable para el color verde oscuro
+GLfloat colorVerdeOscuro[3] = {0, 0.38, 0.03}; // RGB para verde oscuro
+// Definir una variable para el color verde menos oscuro
+GLfloat colorVerdeMenosOscuro[3] = {0, 0.42, 0}; // RGB para verde menos oscuro
+
+void proyeccion()
+{
+    glClearColor(0.66, 0.66, 0.66, 0.0); // Fondo verde
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-100, 100, -100, 100);
+}
+
+void dibujarCesped()
+{
+    glBegin(GL_QUADS);
+
+    // Vértice inferior izquierdo
+    glColor3fv(colorVerdeCesped); // Usar el color naranja
+    glVertex2f(-100, -75);     // Vértice inferior izquierdo
+
+    // Vértice inferior derecho
+    glColor3fv(colorVerdeCesped); // Usar el color naranja
+    glVertex2f(100, -75);      // Vértice inferior derecho
+
+    // Vértice superior derecho
+    glColor3fv(colorAmarilloCesped); // Usar el color amarillo
+    glVertex2f(100, -20);        // Vértice superior derecho
+
+    // Vértice superior izquierdo
+    glColor3fv(colorAmarilloCesped); // Usar el color amarillo
+    glVertex2f(-100, -20);       // Vértice superior izquierdo
+
+    glEnd();
+
+    int inicioEntrada = -50;
+    // para dibujar la entrada de la casa
+    // Definir una variable para el color verde cesped
+    GLfloat colorEntrada1[3] = {0.79, 0.79, 0.79};
+    GLfloat colorEntrada2[3] = {0.7, 0.71, 0.73};
+    glBegin(GL_QUADS);
+    // Vértice inferior izquierdo
+    glColor3fv(colorEntrada1); // Usar el color naranja
+    glVertex2f(inicioEntrada, -75);     // Vértice inferior izquierdo
+
+    // Vértice inferior derecho
+    glColor3fv(colorEntrada2); // Usar el color naranja
+    glVertex2f(inicioEntrada+45, -75);      // Vértice inferior derecho
+
+    // Vértice superior derecho
+    glColor3fv(colorEntrada2); // Usar el color amarillo
+    glVertex2f(inicioEntrada+30, -20);        // Vértice superior derecho
+
+    // Vértice superior izquierdo
+    glColor3fv(colorEntrada1); // Usar el color amarillo
+    glVertex2f(inicioEntrada+15, -20);       // Vértice superior izquierdo
+    glEnd();
+
+}
+
+void dibujarArbolito()
+{
+
+    int puntoInicial = 55;
+
+    GLfloat colorTronco[3] = {0.3, 0.1, 0};
+    glColor3fv(colorTronco); // Usar el color chocolate
+    glBegin(GL_QUADS);
+    glVertex2f(puntoInicial, -50); // Vértice inferior izquierdo
+    glVertex2f(puntoInicial+12, -50);  // Vértice inferior derecho
+    glVertex2f(puntoInicial+12, -20);  // Vértice superior derecho
+    glVertex2f(puntoInicial, -20); // Vértice superior izquierdo
+    glEnd();
+
+    GLfloat colorVerdeArbol[3] = {0, 0.53, 0.05};
+    GLfloat colorVerdeArbolClaro[3] = {0.1, 1, 0.21};
+
+    int alturaTriangulo = -30;
+    int puntaTriangulo = 20;
+
+    for (int i = 0; i < 3; i++)
+    {
+        glBegin(GL_TRIANGLES);    // Iniciar modo para dibujar hojas
+
+        // Definir los tres vértices del triángulo
+        glColor3fv(colorVerdeArbolClaro);
+        glVertex2f((puntoInicial-15)+((i+1)*0.5),alturaTriangulo); // Vértice inferior izquierdo
+        glColor3fv(colorVerdeArbol);
+
+        glVertex2f((puntoInicial+25)-((i+1)*0.5), alturaTriangulo);  // Vértice inferior derecho
+
+        glColor3fv(colorVerdeArbolClaro);
+        glVertex2f(puntoInicial+5, (puntaTriangulo*1.25));    // Vértice superior (vértice de la punta)
+
+
+        glEnd(); // Terminar la especificación del triángulo
+        alturaTriangulo+=10;
+    }
+
+}
+
+// Función para dibujar el cuadrado con gradiente de naranja a amarillo
+void dibujarFondoAtardecer()
+{
+    glBegin(GL_QUADS);
+
+    // Vértice inferior izquierdo
+    glColor3fv(colorNaranja); // Usar el color naranja
+    glVertex2f(-100, -50);     // Vértice inferior izquierdo (cima del rectángulo gris)
+
+    // Vértice inferior derecho
+    glColor3fv(colorNaranja); // Usar el color naranja
+    glVertex2f(100, -30);      // Vértice inferior derecho (cima del rectángulo gris)
+
+    // Vértice superior derecho
+    glColor3fv(colorAmarillo); // Usar el color amarillo
+    glVertex2f(100, 100);        // Vértice superior derecho
+
+    // Vértice superior izquierdo
+    glColor3fv(colorAmarillo); // Usar el color amarillo
+    glVertex2f(-100, 100);       // Vértice superior izquierdo
+
+    glEnd();
+}
+
+
+// Función para dibujar el triángulo de montañas
+void dibujarMountain()
+{
+    glColor3fv(colorVerdeMenosOscuro); // Usar el color verde oscuro
+    glBegin(GL_QUADS);
+
+    glVertex2f(-10, -20);  // Vértice inferior izquierdo
+    glVertex2f(100, -20); // Vértice inferior derecho
+    glVertex2f(100, 45);   // Vértice superior derecho
+    glVertex2f(35, 35);  // Vértice superior izquierdo
+    glEnd();
+
+    glColor3fv(colorVerdeOscuro); // Usar el color verde oscuro
+    glBegin(GL_QUADS);
+
+    glVertex2f(0, -20);  // Vértice inferior izquierdo
+    glVertex2f(100, -20); // Vértice inferior derecho
+    glVertex2f(100, 0);   // Vértice superior derecho
+    glVertex2f(100, 70);  // Vértice superior izquierdo
+    glEnd();
+}
+
+
+// Función principal de dibujo
+void dibujar()
+{
+    glClear(GL_COLOR_BUFFER_BIT); // Limpiar el buffer de color
+
+
+
+    dibujarFondoAtardecer();
+    dibujarCesped();
+    dibujarMountain();
+    dibujarArbolito();
+
+    glFlush(); // Asegurar que los comandos se ejecuten
+}
+
+int main(int argc, char *argv[])
+{
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowSize(1100, 900);     // Tamaño de la ventana
+    glutInitWindowPosition(0, 0); // Posición de la ventana
+    glutCreateWindow("Taller 2 Sistemas Gráficos");
+
+    proyeccion();            // Configuración de la proyección
+    glutDisplayFunc(dibujar); // Función de dibujo
+    glutMainLoop();           // Bucle principal
+
+    return 0;
+}
